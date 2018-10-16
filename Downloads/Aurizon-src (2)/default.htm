@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="https://cdn.botframework.com/botframework-webchat/latest/botchat.css" rel="stylesheet" />
+</head>
+<body style="font-family:'Segoe UI'">
+    <h1>LuisBot Template</h1>
+    <p>A  bot that shows how to handle natural language using the Cognitive Services LUIS API. </p>
+    <p>Here are some handy links to get started:</p>
+    <p>
+        <ul>
+            <li><a href="https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-overview">Get started building bots with .NET.</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/bot-framework/cognitive-services-bot-intelligence-overview#language-understanding">Learn more about LUIS and the Cognitive Services.</a></li>
+            <li><a href="https://www.luis.ai">Visit the LUIS portal.</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/bot-framework/azure/azure-bot-service-continuous-deployment#set-up-continuous-deployment">Get the bot code and setup continuous deployment.</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/bot-framework/debug-bots-emulator">Debug your bot.</a></li>
+        </ul>
+    </p>
+    
+    
+    
+    <div id="BotChatGoesHere"></div>
+
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/botchat.js"></script>
+
+    <script>
+        const params = BotChat.queryParams(location.search);
+        
+        const user = {
+            id: params['userid'] || 'userid',
+            name: params['username'] || 'username'
+        };
+        const bot = {
+            id: params['botid'] || 'botid',
+            name: params['botname'] || 'botname'
+            };
+
+       window.botchatDebug = params['debug'] && params['debug'] === 'true';
+
+
+// < !--const speechOptions = {
+//             speechRecognizer: new BotChat.Speech.BrowserSpeechRecognizer(),
+//             speechSynthesizer: new BotChat.Speech.BrowserSpeechSynthesizer()
+// }; -->
+
+            const speechOptions = {
+            speechRecognizer: new CognitiveServices.SpeechRecognizer({ subscriptionKey: '9468a04018aa4e1cbf01e30327431a87' }),
+            speechSynthesizer: new CognitiveServices.SpeechSynthesizer({
+                gender: CognitiveServices.SynthesisGender.Female,
+                subscriptionKey: '9468a04018aa4e1cbf01e30327431a87',
+                voiceName: 'Microsoft Server Speech Text to Speech Voice (en-US, JessaRUS)'
+            })
+            };
+            
+            BotChat.App({
+            bot: bot,
+            locale: params['locale'],
+            resize: 'detect',
+            // sendTyping: true,    // defaults to false. set to true to send 'typing' activities to bot (and other users) when user is typing
+            speechOptions: speechOptions,
+            user: user,
+            // locale: 'es-es', // override locale to Spanish
+            directLine: {
+                domain: params['domain'],
+                secret: params['s'],
+                token: params['t'],
+                webSocket: params['webSocket'] && params['webSocket'] === 'true' // defaults to true
+            }
+            }, document.getElementById('BotChatGoesHere'));
+            </script>
+            </body>
+            </html>
